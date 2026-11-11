@@ -1,0 +1,59 @@
+{
+  "backend": "Python",
+  "font": "Arial Bold",
+  "preflight": {
+    "ready": true,
+    "strict": false,
+    "counts": {
+      "PASS": 13,
+      "WARN": 1,
+      "FAIL": 0
+    }
+  },
+  "warning_reason": "User-requested engineering presentation width, not journal-column claim",
+  "visual_inspection": "Three PNGs inspected; left-edge panel labels corrected from -0.12 to -0.09",
+  "exports": {
+    "01_walking_results": {
+      "png_size": [
+        3600,
+        1470
+      ],
+      "png_dpi": [
+        299.9994,
+        299.9994
+      ],
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "02_loaded_walking": {
+      "png_size": [
+        3750,
+        2730
+      ],
+      "png_dpi": [
+        299.9994,
+        299.9994
+      ],
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "03_contacts_and_stop": {
+      "png_size": [
+        3900,
+        2760
+      ],
+      "png_dpi": [
+        299.9994,
+        299.9994
+      ],
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    }
+  }
+}

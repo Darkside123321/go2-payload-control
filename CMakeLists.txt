@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.16)
+project(go2_payload_control LANGUAGES CXX)
+
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+add_library(control_core SHARED cpp/control_core.cpp cpp/base_estimator.cpp)
+target_compile_features(control_core PUBLIC cxx_std_17)
+target_compile_options(control_core PRIVATE -Wall -Wextra -Wpedantic)
+target_link_libraries(control_core PRIVATE Eigen3::Eigen)
+
+include(CTest)
+if(BUILD_TESTING)
+    add_executable(check_base_estimator cpp/check_base_estimator.cpp)
+    target_link_libraries(check_base_estimator PRIVATE control_core)
+    add_test(NAME contact_inertial_estimator COMMAND check_base_estimator)
+endif()

@@ -1,0 +1,7 @@
+Go2 Payload Control
+
+Project control code: linear centroidal MPC, standing/locomotion inverse-dynamics QP, payload gravity compensation and simulation evaluation.
+Robot assets are loaded from the separately installed unitreerobotics/unitree_rl_mjlab (Apache-2.0), commit 1425b15f73bd4095f0df53709d7c389c3eb9e790. Robot meshes/MJCF are not redistributed here.
+MuJoCo, NumPy, SciPy, OSQP and matplotlib are external dependencies under their respective licenses; their binaries are not included.
+OSQP MPC formulation/interface reference: https://osqp.org/docs/examples/mpc.html
+Quadruped-PyMPC was inspected as a candidate but is not installed, called or included in this implementation.

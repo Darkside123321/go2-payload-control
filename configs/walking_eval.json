@@ -1,0 +1,67 @@
+{
+  "protocol": "4s stand + 8s fixed 0.1m/s forward; score 5-12s",
+  "paired_initial_state": true,
+  "cases": [
+    {
+      "name": "nominal",
+      "load": 0,
+      "adaptive": true
+    },
+    {
+      "name": "load10_baseline",
+      "load": 0.1,
+      "adaptive": false
+    },
+    {
+      "name": "load10_compensated",
+      "load": 0.1,
+      "adaptive": true
+    },
+    {
+      "name": "load20_baseline",
+      "load": 0.2,
+      "adaptive": false
+    },
+    {
+      "name": "load20_compensated",
+      "load": 0.2,
+      "adaptive": true
+    },
+    {
+      "name": "load20_stress",
+      "load": 0.2,
+      "adaptive": true,
+      "stress": true
+    },
+    {
+      "name": "solver_failure_stop",
+      "load": 0,
+      "adaptive": true,
+      "fault": true
+    },
+    {
+      "name": "solver_failure_mid_swing",
+      "load": 0,
+      "adaptive": true,
+      "fault": true,
+      "fault_start": 6.2
+    }
+  ],
+  "acceptance": {
+    "velocity_rmse_mps": 0.05,
+    "height_rmse_mm": 20.0,
+    "tilt_deg": 5.0,
+    "torque_utilization": 1.0001,
+    "minimum_travel_m": 0.6,
+    "minimum_foot_clearance_m": 0.025,
+    "minimum_contact_changes": 8
+  },
+  "fault_acceptance": {
+    "final_mode": "STOPPED",
+    "final_speed_mps": 0.02,
+    "tilt_deg": 5.0
+  },
+  "stress": "joint torque Gaussian sigma0.03Nm seed2026; 20N horizontal push during7-7.15s",
+  "mpc": "10 stages, dt0.02s; receding horizon force QP",
+  "observer": "pre-walk static estimate only; frozen during locomotion"
+}

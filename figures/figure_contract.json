@@ -1,0 +1,17 @@
+{
+  "backend": "Python/matplotlib",
+  "archetype": "quantitative grids",
+  "claim": "In the fixed forward-walking protocol, estimated payload compensation reduces load-induced height error while preserving bounded torque and physical foot transitions; injected planner failure leads to a stopped stance.",
+  "protocol": "4s pre-stand +8s 0.1m/s forward; metric window5-12s; one paired initial state per case",
+  "panel_data": {
+    "01": "10%/20% paired baseline and compensated metrics; no nominal baseline walking run is invented",
+    "02": "all 3000 rows from each 20% load trajectory; zero height/command/true payload references",
+    "03": "all 3000 rows from compensated20% foot trajectories and failure-stop trace"
+  },
+  "other_cases": "nominal and noisy-push case are retained in benchmark.json and README table; not duplicated in selected trace panels",
+  "uncertainty": "none; no confidence intervals or significance claims from single trajectories",
+  "style": "Arial Bold, solid curves, closed axes, inward ticks, white background without grid or phase guide lines; no footer paragraphs",
+  "exports": "PNG300dpi, editable SVG, TrueType PDF, TIFF600dpi; engineering presentation size, not journal column width",
+  "benchmark_cases": 8,
+  "note": "Additional mid-swing fault case reported in full benchmark; selected figure03 shows the original failure case."
+}
