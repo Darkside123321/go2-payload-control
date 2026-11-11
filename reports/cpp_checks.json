@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "seed": 2026,
+  "cpp_prediction_parity_cases": 20,
+  "B_max_abs_error": 3.469446951953614e-18,
+  "swing_derivative_phases": [
+    0.2,
+    0.5,
+    0.8
+  ],
+  "schedule_cases": 101
+}

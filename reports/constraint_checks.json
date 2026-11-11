@@ -1,0 +1,77 @@
+[
+  {
+    "success": true,
+    "reason": "Optimization terminated successfully",
+    "eq_residual": 1.7763568394002505e-15,
+    "ineq_violation": 5.4569682106375694e-12,
+    "active_solver": true,
+    "name": "friction_boundary",
+    "passed": true,
+    "wall_ms": 1.1839070000005947,
+    "max_torque_utilization": 0.6319918932832985,
+    "max_friction_pyramid_excess_N": 5.4569682106375694e-12,
+    "forces_N": [
+      [
+        5.194438632493336,
+        -8.340309251730102e-14,
+        8.657397720851788
+      ],
+      [
+        5.194235526047795,
+        -2.636032017299441e-13,
+        8.657059210108656
+      ],
+      [
+        54.15094579146043,
+        4.330876100607742e-14,
+        90.25157631909205
+      ],
+      [
+        54.150742685014976,
+        -2.939442927345652e-14,
+        90.25123780834925
+      ]
+    ],
+    "scope": "one QP solve at reference pose; not a dynamic load experiment"
+  },
+  {
+    "success": true,
+    "reason": "Optimization terminated successfully",
+    "eq_residual": 1.7763568394002505e-15,
+    "ineq_violation": 8.517631044924201e-13,
+    "active_solver": true,
+    "name": "torque_boundary",
+    "passed": true,
+    "wall_ms": 1.9527970000003947,
+    "max_torque_utilization": 1.0000000000003786,
+    "max_friction_pyramid_excess_N": -5.4679918343296485,
+    "forces_N": [
+      [
+        -5.864200578358334,
+        -0.4585623926030155,
+        19.65125800881833
+      ],
+      [
+        -5.864198493176336,
+        0.45747237950308817,
+        19.651255144691035
+      ],
+      [
+        -0.1760483488445708,
+        0.0004482037724053279,
+        15.146732241637451
+      ],
+      [
+        -0.17390281027742352,
+        0.0004482036511545963,
+        15.145028767249308
+      ]
+    ],
+    "scope": "one QP solve at reference pose; not a dynamic load experiment"
+  },
+  {
+    "name": "nonfinite_state_rejected",
+    "passed": true,
+    "reason": "invalid state"
+  }
+]

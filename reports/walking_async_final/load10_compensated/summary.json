@@ -1,0 +1,29 @@
+{
+  "completed": true,
+  "failure": null,
+  "sim_seconds": 12.000000000000677,
+  "wall_seconds": 12.074419554999999,
+  "distance_m": 0.8073272775869916,
+  "height_rmse_mm": 1.4842706212389265,
+  "velocity_rmse_mps": 0.01870526032698087,
+  "peak_tilt_deg": 0.20694815516346773,
+  "max_torque_utilization": 0.452705948248554,
+  "max_qp_violation": 6.607920397527778e-07,
+  "control_p99_ms": 3.3885330100056064,
+  "mpc_p99_ms": 6.176547069999571,
+  "mpc_status_counts": {
+    "held": 2400,
+    "solved": 600
+  },
+  "final_payload_estimate_kg": 1.5183136384603928,
+  "final_mode": "RUN",
+  "actual_contact_changes": 119,
+  "minimum_actual_support": 2,
+  "max_measured_foot_clearance_m": 0.04574701513786566,
+  "final_speed_mps": 0.1152038219905001,
+  "mpc_accepted_updates": 600,
+  "mpc_rejected_updates": 0,
+  "late_cycles": 26,
+  "cycle_count": 3000,
+  "realtime_pacing": true
+}

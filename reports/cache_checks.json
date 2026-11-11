@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "cases": 20,
+  "max_first_action_difference_N": 0.04279124773662346,
+  "cached_full_planner_p50_ms": 3.381405999988374,
+  "fresh_QP_setup_and_solve_p50_ms": 7.04517850000741,
+  "interpretation": "fresh cost excludes Python model/constraint assembly; measurements are not end-to-end controller guarantees"
+}

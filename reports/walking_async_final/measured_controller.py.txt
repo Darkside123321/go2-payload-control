@@ -1,0 +1,213 @@
+"""Linear centroidal MPC + inverse-dynamics QP on the existing Go2 torque model."""
+import time
+from concurrent.futures import ThreadPoolExecutor
+import numpy as np
+import mujoco,osqp
+from scipy import sparse
+from scipy.spatial.transform import Rotation
+from standing_control import make_model,initial_state,DT,FEET,MU
+from static_payload_observer import StaticPayloadObserver
+from learner_core import weight_compensation
+from cpp_core import model_B,schedule,swing,PERIOD,DUTY
+STAND_SECONDS=4.
+
+def solve_qp(H,q,A,l,u,warm=None,eps=1e-5):
+    solver=osqp.OSQP()
+    solver.setup(P=sparse.csc_matrix(np.triu(H)),q=q,A=sparse.csc_matrix(A),l=l,u=u,
+                 verbose=False,eps_abs=eps,eps_rel=eps,max_iter=4000,polishing=True)
+    if warm is not None:solver.warm_start(x=warm)
+    res=solver.solve(raise_error=False)
+    ok=res.info.status_val in (1,2) and res.x is not None and np.isfinite(res.x).all()
+    if ok:
+        violation=max(float(np.max(l-A@res.x)),float(np.max(A@res.x-u)),0.)
+        ok=violation<2e-3
+    else:violation=float('inf')
+    return (res.x if ok else None),{'status':res.info.status,'iterations':res.info.iter,'violation':violation}
+
+class CentroidalMPC:
+    def __init__(self,nominal):
+        self.N=10;self.dt=.02;self.mass=float(nominal.body_mass.sum())
+        self.Q=np.array([80.,80.,500.,30.,30.,60.,600.,600.,150.,4.,4.,4.])
+        self.A=np.eye(12);self.A[:3,3:6]=np.eye(3)*self.dt;self.A[6:9,9:12]=np.eye(3)*self.dt
+        self.warm=None;self.workspace=None
+    def solve(self,state,feet,world_inertia,walk_time,ref_position,velocity,mass):
+        N=self.N;nx=12;nu=12;n=(N+1)*nx+N*nu;off=(N+1)*nx
+        P=np.diag(np.r_[np.tile(self.Q,N),3*self.Q,np.full(N*nu,.0005)])
+        q=np.zeros(n)
+        for k in range(N+1):
+            ref=np.r_[ref_position+velocity*k*self.dt,velocity,np.zeros(6)]
+            q[k*nx:(k+1)*nx]=-self.Q*ref*(3 if k==N else 1)
+        B=model_B(mass,np.linalg.inv(world_inertia),feet-state[:3],self.dt)
+        g=np.zeros(12);g[2]=-.5*9.81*self.dt**2;g[5]=-9.81*self.dt
+        A=np.zeros(((N+1)*12+N*12+N*20,n));l=np.full(A.shape[0],-np.inf);u=np.full(A.shape[0],np.inf)
+        A[:12,:12]=np.eye(12);l[:12]=state;u[:12]=state
+        for k in range(N):
+            row=(k+1)*12
+            A[row:row+12,k*12:(k+1)*12]=-self.A
+            A[row:row+12,(k+1)*12:(k+2)*12]=np.eye(12)
+            A[row:row+12,off+k*12:off+(k+1)*12]=-B
+            l[row:row+12]=g;u[row:row+12]=g
+            c,_=schedule(walk_time+k*self.dt)
+            row=(N+1)*12+k*12;A[row:row+12,off+k*12:off+(k+1)*12]=np.eye(12)
+            for j in range(4):
+                if c[j]:
+                    l[row+3*j:row+3*j+3]=[-mass*9.81,-mass*9.81,0]
+                    u[row+3*j:row+3*j+3]=[mass*9.81,mass*9.81,mass*9.81]
+                else:l[row+3*j:row+3*j+3]=0;u[row+3*j:row+3*j+3]=0
+                rr=(N+1)*12+N*12+k*20+j*5
+                for z,(sx,sy) in enumerate([(1,1),(1,-1),(-1,1),(-1,-1)]):
+                    A[rr+z,off+k*12+3*j:off+k*12+3*j+3]=[sx,sy,-MU];u[rr+z]=0
+                A[rr+4,off+k*12+3*j+2]=-1;u[rr+4]=0
+        if self.workspace is None:
+            mask=A!=0
+            for k in range(N):
+                mask[(k+1)*12:(k+2)*12,off+k*12:off+(k+1)*12]=True
+            pattern=sparse.csc_matrix(mask.astype(float))
+            self.pattern_rows=pattern.indices.copy()
+            self.pattern_cols=np.repeat(np.arange(n),np.diff(pattern.indptr))
+            pattern.data=A[self.pattern_rows,self.pattern_cols]
+            self.workspace=osqp.OSQP()
+            self.workspace.setup(P=sparse.csc_matrix(np.triu(P)),q=q,A=pattern,l=l,u=u,
+              verbose=False,eps_abs=1e-7,eps_rel=1e-7,max_iter=4000,polishing=True)
+        else:
+            self.workspace.update(q=q,l=l,u=u,Ax=A[self.pattern_rows,self.pattern_cols])
+        result=self.workspace.solve(raise_error=False)
+        self.last_problem=(P,q,A,l,u)
+        ok=result.info.status_val in (1,2) and result.x is not None and np.isfinite(result.x).all()
+        violation=max(float(np.max(l-A@result.x)),float(np.max(A@result.x-u)),0.) if ok else float('inf')
+        receipt={'status':result.info.status,'iterations':result.info.iter,'violation':violation}
+        if not ok or violation>=2e-3:return None,receipt
+        self.warm=result.x.copy()
+        return result.x[off:off+12].reshape(4,3),receipt
+
+class LocomotionController:
+    def __init__(self,adaptive=True,velocity=.1):
+        self.model,self.limits=make_model();self.d=mujoco.MjData(self.model)
+        self.qref=initial_state(self.model);self.initial_base=self.qref[:3].copy()
+        self.d.qpos[:]=self.qref;mujoco.mj_forward(self.model,self.d)
+        self.sids=[self.model.site(f).id for f in FEET]
+        self.offsets=np.array([self.d.site_xpos[s].copy()-self.qref[:3] for s in self.sids])
+        self.anchors=np.array([self.d.site_xpos[s].copy() for s in self.sids])
+        self.starts=self.anchors.copy();self.ends=self.anchors.copy();self.previous_contact=np.ones(4,dtype=bool)
+        self.observer=StaticPayloadObserver();self.adaptive=adaptive;self.payload=0.
+        self.mpc=CentroidalMPC(self.model);self.velocity=velocity
+        self.prevJ=None;self.tick=0;self.last_forces=None;self.warm=None
+        self.mode='RUN';self.failed_mpc=0;self.stop_time=None;self.stop_base=None
+        self.worker=ThreadPoolExecutor(max_workers=1,thread_name_prefix='mpc')
+        self.future=None;self.last_mpc_age=0.;self.mpc_updates=0;self.mpc_rejected=0
+        self.initial_com=self.d.subtree_com[self.model.body('base_link').id].copy()
+        self.initial_inertia=self._inertia()
+    def _inertia(self):
+        d=self.d;m=self.model;r=d.subtree_com[m.body('base_link').id]
+        I=np.zeros((3,3))
+        for b in range(1,m.nbody):
+            R=d.ximat[b].reshape(3,3);a=d.xipos[b]-r
+            I+=R@np.diag(m.body_inertia[b])@R.T+m.body_mass[b]*(a@a*np.eye(3)-np.outer(a,a))
+        return I
+    def step(self,t,qpos,qvel,measured_tau,inject_mpc_failure=False):
+        if not all(np.isfinite(v).all() for v in [qpos,qvel,measured_tau]):
+            return None,{'reason':'invalid measurement','mode':'ABORT'}
+        m=self.model;d=self.d;d.qpos[:]=qpos;d.qvel[:]=qvel;mujoco.mj_forward(m,d)
+        if self.adaptive and t<STAND_SECONDS:
+            obs=self.observer.update(qpos,qvel,measured_tau);self.payload=obs['estimate_kg']
+        # Static observer is frozen during walking: two-foot support is not its valid domain.
+        walk=t-STAND_SECONDS
+        if self.stop_time is not None:walk=min(walk,self.stop_time)
+        contacts,phases=schedule(walk)
+        if self.mode=='STOPPING' and contacts.all():
+            self.stop_time=walk;self.mode='STOPPED'
+            self.stop_base=qpos[:3].copy()
+        vel=np.array([self.velocity if t>=STAND_SECONDS and self.mode=='RUN' else 0.,0,0])
+        base_ref=self.initial_base+np.array([self.velocity*max(0,t-STAND_SECONDS),0,0])
+        if self.stop_base is not None:base_ref=self.stop_base.copy();base_ref[2]=self.initial_base[2]
+        feet=np.array([d.site_xpos[s].copy() for s in self.sids])
+        feet_vel=[];J=[]
+        for sid in self.sids:
+            jp=np.zeros((3,18));jr=jp.copy();mujoco.mj_jacSite(m,d,jp,jr,sid)
+            J.append(jp);feet_vel.append(jp@qvel)
+        J=np.vstack(J);feet_vel=np.array(feet_vel)
+        desired=[]
+        for i in range(4):
+            if self.previous_contact[i] and not contacts[i]:
+                self.starts[i]=feet[i]
+                self.ends[i]=qpos[:3]+self.offsets[i]
+                self.ends[i,:2]+=vel[:2]*PERIOD*DUTY*.5+.05*(qvel[:2]-vel[:2])
+                self.ends[i,2]=self.anchors[i,2]
+            if contacts[i] and not self.previous_contact[i]:self.anchors[i]=self.ends[i].copy()
+            if contacts[i]:
+                desired.append(250*(self.anchors[i]-feet[i])-25*feet_vel[i])
+            else:
+                p,v,a=swing(self.starts[i],self.ends[i],phases[i])
+                desired.append(a+250*(p-feet[i])+25*(v-feet_vel[i]))
+        self.previous_contact=contacts.copy()
+        planned_ms=0.;mpc_status='held'
+        if self.last_forces is None:
+            self.last_forces=np.zeros((4,3));self.last_forces[:,2]=self.mpc.mass*9.81/4
+        if self.future is not None and self.future.done():
+            requested,force,rec,elapsed=self.future.result()
+            self.future=None;planned_ms=elapsed;mpc_status=rec['status'];self.last_mpc_age=t-requested
+            if elapsed>20. or t-requested>.08:
+                force=None;mpc_status='expired MPC solution'
+            if force is None:
+                self.mpc_rejected+=1;self.failed_mpc+=1
+                if self.failed_mpc>=2:self.mode='STOPPING'
+            elif self.mode=='RUN':
+                self.last_forces=force;self.failed_mpc=0;self.mpc_updates+=1
+        if self.mode in ('STOPPING','STOPPED'):
+            self.last_forces=np.zeros((4,3))
+            self.last_forces[contacts,2]=(self.mpc.mass+self.payload)*9.81/max(1,contacts.sum())
+        if self.tick%5==0 and self.future is None and self.mode=='RUN':
+            quat=qpos[3:7];rpy=Rotation.from_quat(np.r_[quat[1:],quat[0]]).as_euler('xyz')
+            R=d.xmat[m.body('base_link').id].reshape(3,3)
+            jac=np.zeros((3,18));mujoco.mj_jacSubtreeCom(m,d,jac,m.body('base_link').id)
+            state=np.r_[d.subtree_com[m.body('base_link').id],jac@qvel,rpy,R@qvel[3:6]]
+            comref=base_ref+(self.initial_com-self.initial_base)
+            job=(state.copy(),feet.copy(),self.initial_inertia.copy(),walk,comref.copy(),vel.copy(),self.mpc.mass+self.payload)
+            def compute(requested,arguments,inject):
+                start=time.perf_counter()
+                if inject:force=None;rec={'status':'injected deadline failure'}
+                else:force,rec=self.mpc.solve(*arguments)
+                return requested,force,rec,(time.perf_counter()-start)*1000
+            self.future=self.worker.submit(compute,t,job,inject_mpc_failure)
+        fref=self.last_forces.copy();fref[~contacts]=0.
+        M=np.zeros((18,18));mujoco.mj_fullM(m,M,d.qM)
+        h=d.qfrc_bias.copy()
+        if self.adaptive:
+            jp=np.zeros((3,18));jr=jp.copy();mujoco.mj_jacBodyCom(m,d,jp,jr,m.body('base_link').id)
+            h+=jp.T@np.array([0.,0.,9.81*self.payload])
+        jdot=np.zeros(12) if self.prevJ is None else ((J-self.prevJ)/DT)@qvel
+        self.prevJ=J.copy()
+        qtarget=self.qref.copy();qtarget[:3]=base_ref
+        error=np.zeros(18);mujoco.mj_differentiatePos(m,error,1.,qpos,qtarget)
+        kp=np.r_[[60,60,160,120,120,100],np.full(12,10)]
+        kd=np.r_[[15,15,25,20,20,18],np.full(12,3)]
+        aref=kp*error-kd*qvel;aref[:3]+=kd[:3]*vel
+        H=np.diag(np.r_[np.full(6,100.),np.full(12,.2),np.full(12,.5)])
+        ref=np.r_[aref,fref.ravel()];q=-H@ref
+        E=[np.hstack([M[:6],-J[:,:6].T])];be=[-h[:6]]
+        for i in range(4):
+            jj=J[3*i:3*i+3]
+            task=np.hstack([jj,np.zeros((3,12))])
+            if contacts[i]:E.append(task);be.append(desired[i]-jdot[3*i:3*i+3])
+            else:
+                H+=100.*task.T@task;q-=100.*task.T@(desired[i]-jdot[3*i:3*i+3])
+                z=np.zeros((3,30));z[:,18+3*i:18+3*i+3]=np.eye(3);E.append(z);be.append(np.zeros(3))
+        E=np.vstack(E);be=np.concatenate(be)
+        G=np.zeros((20,30))
+        for i in range(4):
+            for k,(sx,sy) in enumerate([(1,1),(1,-1),(-1,1),(-1,-1)]):
+                G[5*i+k,18+3*i:18+3*i+3]=[sx,sy,-MU]
+            G[5*i+4,18+3*i+2]=-1
+        T=np.hstack([M[6:],-J[:,6:].T])
+        A=np.vstack([E,G,T])
+        low=np.r_[be,np.full(20,-np.inf),-self.limits-h[6:]]
+        upper=np.r_[be,np.zeros(20),self.limits-h[6:]]
+        x,rec=solve_qp(H,q,A,low,upper,self.warm,eps=1e-6)
+        self.tick+=1
+        if x is None:return None,{'reason':'WBC '+rec['status'],'mode':self.mode,'mpc_status':mpc_status}
+        self.warm=x.copy();tau=T@x+h[6:]
+        return tau,{'mode':self.mode,'contacts':contacts.tolist(),'payload_estimate_kg':self.payload,
+         'mpc_status':mpc_status,'mpc_ms':planned_ms,'qp_violation':rec['violation'],
+         'joint_torque_utilization':float(np.max(abs(tau)/self.limits)),
+         'planned_forces':x[18:].reshape(4,3),'mpc_age_s':self.last_mpc_age,
+         'mpc_updates':self.mpc_updates,'mpc_rejected':self.mpc_rejected}

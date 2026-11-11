@@ -1,0 +1,68 @@
+{
+  "date_local": "2026-11-11",
+  "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "linux_release": "Ubuntu 22.04.5 LTS",
+  "project_python": "3.11.18",
+  "ros_system_python": "Python 3.10.12",
+  "cxx": "11.4.0",
+  "dependencies": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "mujoco": "3.5.0",
+    "osqp": "1.0.4"
+  },
+  "apt_packages": {
+    "cmake": "3.22.1-1ubuntu1.22.04.2",
+    "g++": "4:11.2.0-1ubuntu1",
+    "libeigen3-dev": "3.4.0-2ubuntu2",
+    "make": "4.3-4.1build1",
+    "ros-humble-fastrtps": "2.6.12-1jammy.20260723.233918",
+    "ros-humble-nav-msgs": "4.9.2-1jammy.20260907.211410",
+    "ros-humble-rclpy": "3.3.22-1jammy.20260907.213431",
+    "ros-humble-rmw-fastrtps-cpp": "6.2.10-1jammy.20260907.210327",
+    "ros-humble-sensor-msgs": "4.9.2-1jammy.20260907.212033"
+  },
+  "unitree_rl_mjlab_commit": "1425b15f73bd4095f0df53709d7c389c3eb9e790",
+  "v1_commit": "5c14b8bc80911694c37e5d45fd5915c43fa026be",
+  "source_sha256": {
+    "CMakeLists.txt": "59c3a075cf72146a504f03b4a664051cacf505a8e7f051a966c2e38afdfbec6c",
+    "build.sh": "4cfaa7abc5bb2ca2a6bf50633ac2b9cd6571fa1fe891c84f76fb6e522870df73",
+    "base_estimation.py": "8eb849b8c26571110d4703c60ec191b04bdedc7c42c9cbacf67e24299ac05e79",
+    "cpp_core.py": "7fac4e27629910f8758a20a5fbd68da658fcd051b1cd9df5c5ec3f5ba64af6e9",
+    "cpp/base_estimator.cpp": "ad523aeef853db22402f3140a2869b60ca38305057da18a45612fc87c685c12e",
+    "cpp/base_estimator.h": "5d2beb5eeb811799950beb1acdade5a51015093046c34ffa2f3daeaa9276127e",
+    "cpp/control_core.cpp": "3b29abc7741ac223a54b240fb09bfcf340989de6992b6f32c078a38ddb620dab",
+    "cpp/check_base_estimator.cpp": "65285ed7813df108f7cf97be27d8f6958547a555adc178721334e79428b17f8d",
+    "standing_control.py": "cf4280fc9592f268c22cbb6bbe967ae26c631315b00acdab2b15d18663c577e4",
+    "locomotion_control.py": "c3295ce6365db91e0476642aef5e815e47a35714595d4dba81a129c5f02de8cf",
+    "local_transport.py": "9e30ed8dd1bf2fb14ae76894b9ba2531ce6f5896d51fc409c172924b56fd027c",
+    "run_sensor_control.py": "fcf9bcb0fa64b15688cc79d0143929cd6544b0508cbd267be7ea844b8451dd2e",
+    "ros_bridge.py": "955e3b25c541abdf0e1adf16c6004ec37b36a936a41d1ce48b3492540e17f53f",
+    "check_ros_loop.py": "2a60a5d3e8c9290ca5aec6cfb90fd54ded9dc4087542d56c1bd8be1763f66305",
+    "check_ros_loop.sh": "284c391d11ae4d7e0f4d352fe2845e047abda9ffe05405ef9a030c8a83c1431d",
+    "check_sensor_results.py": "364be2aabb2af0ab72e72d6d9ca20f5e1efcd296d585b5d6343fae70f758e14e",
+    "configs/fastdds_loopback.xml": "dc5af391a46b5124d9847d9cd61c356e5b437cf644705e0d26e91e6a4efcd73b"
+  },
+  "run_files_sha256": {
+    "ACCEPTANCE.json": "ae12844294dcb4da1c14dfed6a3b86fb94d28e4c52b105071ec315438301d1e6",
+    "loaded/summary.json": "de18946260f7b76b3a58e21a2b21f15832f647de99e483cafd2a7c1adbf3b409",
+    "loaded/trace.csv": "9ccb730cbffddedc3f7d7914c67e96f5e54dff0e676eca3216c3ac7170125ec5",
+    "nominal/summary.json": "894a01754df4a69950fb8615d7383cbed5d081cebd48504d73a1c7d05dd4e168",
+    "nominal/trace.csv": "7ddbccccc1a4b76d97f387aa7e3e48d890080e10b44b159c862c542d6fce69fc",
+    "ros_timeout/dds.json": "8e880d7feb28277120a4e287881f12db2a96bdffed6af04c2c6a5b01647ccbbd",
+    "ros_timeout/summary.json": "c40ae398b96281ab1850fc6452e39d54ce503dfbced83c17d775791d24c818e4",
+    "ros_timeout/trace.csv": "35910a72c14a1b5af26e713137bbd6bc2a36d0259e39ba959b5fba0ff0bb8164",
+    "ros_zero/dds.json": "b16f8cfed83b00bfb8be4e4385bbc4cfd80755314a5fb8180432b37c57ab4ca6",
+    "ros_zero/summary.json": "04b7df2486a77e6cef4273473c351aeef66ecab5d1fa61634fc1cb68a8a19b33",
+    "ros_zero/trace.csv": "a05a417ea8abbd409e70eac29637895a552145734199a693806718e06b79ca25"
+  },
+  "checks": [
+    "CTest contact_inertial_estimator",
+    "check_cpp.py",
+    "check_supervisor.py",
+    "check_learner.py",
+    "check_constraints.py",
+    "check_mpc_cache.py",
+    "check_sensor_results.py"
+  ]
+}

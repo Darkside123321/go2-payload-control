@@ -1,0 +1,19 @@
+[
+  {
+    "case": "exception",
+    "passed": true,
+    "rejections": 2,
+    "final_mode": "STOPPED"
+  },
+  {
+    "case": "stale_solution",
+    "passed": true,
+    "rejections": 2,
+    "final_mode": "STOPPED"
+  },
+  {
+    "case": "nonfinite_input",
+    "passed": true,
+    "mode": "ABORT"
+  }
+]

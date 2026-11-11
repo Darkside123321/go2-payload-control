@@ -1,0 +1,384 @@
+{
+  "protocol": {
+    "protocol": "4s stand + 8s fixed 0.1m/s forward; score 5-12s",
+    "paired_initial_state": true,
+    "cases": [
+      {
+        "name": "nominal",
+        "load": 0,
+        "adaptive": true
+      },
+      {
+        "name": "load10_baseline",
+        "load": 0.1,
+        "adaptive": false
+      },
+      {
+        "name": "load10_compensated",
+        "load": 0.1,
+        "adaptive": true
+      },
+      {
+        "name": "load20_baseline",
+        "load": 0.2,
+        "adaptive": false
+      },
+      {
+        "name": "load20_compensated",
+        "load": 0.2,
+        "adaptive": true
+      },
+      {
+        "name": "load20_stress",
+        "load": 0.2,
+        "adaptive": true,
+        "stress": true
+      },
+      {
+        "name": "solver_failure_stop",
+        "load": 0,
+        "adaptive": true,
+        "fault": true
+      },
+      {
+        "name": "solver_failure_mid_swing",
+        "load": 0,
+        "adaptive": true,
+        "fault": true,
+        "fault_start": 6.2
+      }
+    ],
+    "acceptance": {
+      "velocity_rmse_mps": 0.05,
+      "height_rmse_mm": 20.0,
+      "tilt_deg": 5.0,
+      "torque_utilization": 1.0001,
+      "minimum_travel_m": 0.6,
+      "minimum_foot_clearance_m": 0.025,
+      "minimum_contact_changes": 8
+    },
+    "fault_acceptance": {
+      "final_mode": "STOPPED",
+      "final_speed_mps": 0.02,
+      "tilt_deg": 5.0
+    },
+    "stress": "joint torque Gaussian sigma0.03Nm seed2026; 20N horizontal push during7-7.15s",
+    "mpc": "10 stages, dt0.02s; receding horizon force QP",
+    "observer": "pre-walk static estimate only; frozen during locomotion"
+  },
+  "results": [
+    {
+      "completed": true,
+      "failure": null,
+      "sim_seconds": 12.000000000000677,
+      "wall_seconds": 12.069998365,
+      "distance_m": 0.8051682963104649,
+      "height_rmse_mm": 1.4457957720783088,
+      "velocity_rmse_mps": 0.016962807689047097,
+      "peak_tilt_deg": 0.09381097193953726,
+      "max_torque_utilization": 0.41991817106774515,
+      "max_qp_violation": 6.30902320608584e-07,
+      "control_p99_ms": 3.633702590000545,
+      "mpc_p99_ms": 5.808929700001411,
+      "mpc_status_counts": {
+        "held": 2400,
+        "solved": 600
+      },
+      "final_payload_estimate_kg": 0.00019572165416564447,
+      "final_mode": "RUN",
+      "actual_contact_changes": 113,
+      "minimum_actual_support": 2,
+      "max_measured_foot_clearance_m": 0.04574882206557831,
+      "final_speed_mps": 0.1149660078591731,
+      "mpc_accepted_updates": 600,
+      "mpc_rejected_updates": 0,
+      "late_cycles": 40,
+      "cycle_count": 3000,
+      "realtime_pacing": true,
+      "case": {
+        "name": "nominal",
+        "load": 0,
+        "adaptive": true
+      },
+      "acceptance_passed": true
+    },
+    {
+      "completed": true,
+      "failure": null,
+      "sim_seconds": 12.000000000000677,
+      "wall_seconds": 12.066815143000003,
+      "distance_m": 0.8087588486195693,
+      "height_rmse_mm": 11.28068238931454,
+      "velocity_rmse_mps": 0.021017977549545,
+      "peak_tilt_deg": 0.3229002580508384,
+      "max_torque_utilization": 0.4729414336703701,
+      "max_qp_violation": 6.24906476787146e-07,
+      "control_p99_ms": 3.31204123999999,
+      "mpc_p99_ms": 5.776581239999352,
+      "mpc_status_counts": {
+        "held": 2400,
+        "solved": 600
+      },
+      "final_payload_estimate_kg": 0.0,
+      "final_mode": "RUN",
+      "actual_contact_changes": 89,
+      "minimum_actual_support": 2,
+      "max_measured_foot_clearance_m": 0.04605084351994578,
+      "final_speed_mps": 0.11841880861431267,
+      "mpc_accepted_updates": 600,
+      "mpc_rejected_updates": 0,
+      "late_cycles": 16,
+      "cycle_count": 3000,
+      "realtime_pacing": true,
+      "case": {
+        "name": "load10_baseline",
+        "load": 0.1,
+        "adaptive": false
+      },
+      "acceptance_passed": true
+    },
+    {
+      "completed": true,
+      "failure": null,
+      "sim_seconds": 12.000000000000677,
+      "wall_seconds": 12.074419554999999,
+      "distance_m": 0.8073272775869916,
+      "height_rmse_mm": 1.4842706212389265,
+      "velocity_rmse_mps": 0.01870526032698087,
+      "peak_tilt_deg": 0.20694815516346773,
+      "max_torque_utilization": 0.452705948248554,
+      "max_qp_violation": 6.607920397527778e-07,
+      "control_p99_ms": 3.3885330100056064,
+      "mpc_p99_ms": 6.176547069999571,
+      "mpc_status_counts": {
+        "held": 2400,
+        "solved": 600
+      },
+      "final_payload_estimate_kg": 1.5183136384603928,
+      "final_mode": "RUN",
+      "actual_contact_changes": 119,
+      "minimum_actual_support": 2,
+      "max_measured_foot_clearance_m": 0.04574701513786566,
+      "final_speed_mps": 0.1152038219905001,
+      "mpc_accepted_updates": 600,
+      "mpc_rejected_updates": 0,
+      "late_cycles": 26,
+      "cycle_count": 3000,
+      "realtime_pacing": true,
+      "case": {
+        "name": "load10_compensated",
+        "load": 0.1,
+        "adaptive": true
+      },
+      "acceptance_passed": true
+    },
+    {
+      "completed": true,
+      "failure": null,
+      "sim_seconds": 12.000000000000677,
+      "wall_seconds": 12.086147529000002,
+      "distance_m": 0.8125957922009515,
+      "height_rmse_mm": 21.827012079762063,
+      "velocity_rmse_mps": 0.025455825136533834,
+      "peak_tilt_deg": 0.582789176827963,
+      "max_torque_utilization": 0.5290735973501859,
+      "max_qp_violation": 6.175478404202295e-07,
+      "control_p99_ms": 3.3860398000019387,
+      "mpc_p99_ms": 6.578170929999558,
+      "mpc_status_counts": {
+        "held": 2400,
+        "solved": 600
+      },
+      "final_payload_estimate_kg": 0.0,
+      "final_mode": "RUN",
+      "actual_contact_changes": 94,
+      "minimum_actual_support": 2,
+      "max_measured_foot_clearance_m": 0.046558422929720615,
+      "final_speed_mps": 0.12193068685193022,
+      "mpc_accepted_updates": 600,
+      "mpc_rejected_updates": 0,
+      "late_cycles": 20,
+      "cycle_count": 3000,
+      "realtime_pacing": true,
+      "case": {
+        "name": "load20_baseline",
+        "load": 0.2,
+        "adaptive": false
+      },
+      "acceptance_passed": false
+    },
+    {
+      "completed": true,
+      "failure": null,
+      "sim_seconds": 12.000000000000677,
+      "wall_seconds": 12.277511185999991,
+      "distance_m": 0.8096176730360728,
+      "height_rmse_mm": 1.6443716507707253,
+      "velocity_rmse_mps": 0.020365399070032222,
+      "peak_tilt_deg": 0.41447461829571,
+      "max_torque_utilization": 0.4842623988983677,
+      "max_qp_violation": 6.887552785883599e-07,
+      "control_p99_ms": 3.6669905700005443,
+      "mpc_p99_ms": 6.208277429998502,
+      "mpc_status_counts": {
+        "held": 2400,
+        "solved": 600
+      },
+      "final_payload_estimate_kg": 3.021606368264136,
+      "final_mode": "RUN",
+      "actual_contact_changes": 116,
+      "minimum_actual_support": 2,
+      "max_measured_foot_clearance_m": 0.045750401238373754,
+      "final_speed_mps": 0.11662198636303418,
+      "mpc_accepted_updates": 600,
+      "mpc_rejected_updates": 0,
+      "late_cycles": 52,
+      "cycle_count": 3000,
+      "realtime_pacing": true,
+      "case": {
+        "name": "load20_compensated",
+        "load": 0.2,
+        "adaptive": true
+      },
+      "acceptance_passed": true
+    },
+    {
+      "completed": true,
+      "failure": null,
+      "sim_seconds": 12.000000000000677,
+      "wall_seconds": 12.073173272999995,
+      "distance_m": 0.8095748829096155,
+      "height_rmse_mm": 1.7120417931809573,
+      "velocity_rmse_mps": 0.03450375514416752,
+      "peak_tilt_deg": 0.41447793098940716,
+      "max_torque_utilization": 0.4861735881192079,
+      "max_qp_violation": 6.887032384383929e-07,
+      "control_p99_ms": 3.5856219599968133,
+      "mpc_p99_ms": 5.911666800002564,
+      "mpc_status_counts": {
+        "held": 2400,
+        "solved": 600
+      },
+      "final_payload_estimate_kg": 3.0193178646984906,
+      "final_mode": "RUN",
+      "actual_contact_changes": 110,
+      "minimum_actual_support": 2,
+      "max_measured_foot_clearance_m": 0.04583777296328328,
+      "final_speed_mps": 0.11753459867361199,
+      "mpc_accepted_updates": 600,
+      "mpc_rejected_updates": 0,
+      "late_cycles": 42,
+      "cycle_count": 3000,
+      "realtime_pacing": true,
+      "case": {
+        "name": "load20_stress",
+        "load": 0.2,
+        "adaptive": true,
+        "stress": true
+      },
+      "acceptance_passed": true
+    },
+    {
+      "completed": true,
+      "failure": null,
+      "sim_seconds": 12.000000000000677,
+      "wall_seconds": 12.070274838000003,
+      "distance_m": 0.215427239388707,
+      "height_rmse_mm": 0.6582492464149935,
+      "velocity_rmse_mps": 0.09248908468476272,
+      "peak_tilt_deg": 0.09390195857992487,
+      "max_torque_utilization": 0.42008153825305006,
+      "max_qp_violation": 6.308999616067013e-07,
+      "control_p99_ms": 3.398672509993898,
+      "mpc_p99_ms": 5.859791239997496,
+      "mpc_status_counts": {
+        "held": 2697,
+        "solved": 301,
+        "injected deadline failure": 2
+      },
+      "final_payload_estimate_kg": 0.00019572475733015783,
+      "final_mode": "STOPPED",
+      "actual_contact_changes": 31,
+      "minimum_actual_support": 2,
+      "max_measured_foot_clearance_m": 0.04574893259693243,
+      "final_speed_mps": 1.8539502628397704e-06,
+      "mpc_accepted_updates": 301,
+      "mpc_rejected_updates": 2,
+      "late_cycles": 16,
+      "cycle_count": 3000,
+      "realtime_pacing": true,
+      "case": {
+        "name": "solver_failure_stop",
+        "load": 0,
+        "adaptive": true,
+        "fault": true
+      },
+      "acceptance_passed": true
+    },
+    {
+      "completed": true,
+      "failure": null,
+      "sim_seconds": 12.000000000000677,
+      "wall_seconds": 12.068866817,
+      "distance_m": 0.2345331878718796,
+      "height_rmse_mm": 0.6815863206668318,
+      "velocity_rmse_mps": 0.09094731792324258,
+      "peak_tilt_deg": 0.09390251872852362,
+      "max_torque_utilization": 0.42008162472285454,
+      "max_qp_violation": 6.309023490302934e-07,
+      "control_p99_ms": 3.3420417300005645,
+      "mpc_p99_ms": 6.049937919999947,
+      "mpc_status_counts": {
+        "held": 2687,
+        "solved": 311,
+        "injected deadline failure": 2
+      },
+      "final_payload_estimate_kg": 0.0001957216067493942,
+      "final_mode": "STOPPED",
+      "actual_contact_changes": 33,
+      "minimum_actual_support": 2,
+      "max_measured_foot_clearance_m": 0.045748934047621696,
+      "final_speed_mps": 5.940035293727341e-06,
+      "mpc_accepted_updates": 311,
+      "mpc_rejected_updates": 2,
+      "late_cycles": 23,
+      "cycle_count": 3000,
+      "realtime_pacing": true,
+      "case": {
+        "name": "solver_failure_mid_swing",
+        "load": 0,
+        "adaptive": true,
+        "fault": true,
+        "fault_start": 6.2
+      },
+      "acceptance_passed": true
+    }
+  ],
+  "source_sha256": {
+    "run_compensated_v2.py": "0d42749fb61a4fc7b5892509952e1e5b619923f046a3aec136fccee7c83c51be",
+    "run_compensated.py": "06b150822ab27a013b29c72dbffef8d06aa08ec8afc97abf5b3b4d8294ecf686",
+    "check_supervisor.py": "5b6f26f1d18daa511271e72a4d7e13968ab723544b8a605bc3bf49120dfaa922",
+    "evaluate_walking.py": "220a37f7451d1fbb88613c8f00537e5cfc04070506a5d43b46a9581048ddc95e",
+    "locomotion_control.py": "13a80b603f0b634c4022ee2a8d6bd5afeb4c462c693a467b4554357b41a05088",
+    "check_mpc_cache.py": "021efedf49a2d5c4c9b56edec54830d8e6da56cc880851b29532bc4c41c5e99e",
+    "check_learner.py": "82abfac4a40f1c9add5640c2980aad92de843a69d0969f9866d9c276798ae48d",
+    "demo.py": "9a6048d90a4a2a0a3ba6f179e2158689458e32b596d19a90d84e1b69ebe70162",
+    "standing_control.py": "0cd6fe3f84a59f9c49ae7e16c58a2d92cae2a68bcd782f0c877232d6c6699341",
+    "learner_core.py": "d4f6ce68e20cbb2fcf0e223a686298ddc0e612851cd767856ac7b75c75bd4fdf",
+    "check_cpp.py": "a4f597c14e765c76f667dc639a470764366ce6164240480386ef5b40b60a2981",
+    "run_standing.py": "d96800728fd8c4aff519d44c875cce8868e52dd9c6466d6eaac833be98d6e232",
+    "check_constraints.py": "e1b9df978f8a132ba3e12c9353e71663f1a84d417f187b6d2f28841a7b748044",
+    "run_stress_v2.py": "32e5c0fd509ad950f05c91562083d009f3658f81acfeb1d9d0f44ef712fccec8",
+    "plot_results.py": "39f871f4703c5379beb1a8d870336c43b93c9308f026a0df494f5ece5a01ac27",
+    "compensated_control.py": "18b66f9e315088022ee0984231c9cfe8791283a0b8c0df5f08a1c6a1f4938895",
+    "run_walking.py": "c72ff3a126d69e04531f5e8da435d8932987660c1dfde80d56d7a160d62c346d",
+    "cpp_core.py": "070ed11e1d88e623199a164f29cfc054f896ac9ac18c3d7970be1e69b1d91fa3",
+    "static_payload_observer.py": "d32c51aa767c7d6544311c21891e6ab0bf81b3343f6b2b63c17b93d3a8635ba1",
+    "dynamics_audit.py": "b27563b07cb0acb584b318c8a7fcd1d01c1580857f672f70352a915f1c1ee28b",
+    "run_stress.py": "fa1dfc2458ce0fbe939d770734b6418c553dc51abf177d919d7708f95447ebc5",
+    "cpp/control_core.cpp": "3b29abc7741ac223a54b240fb09bfcf340989de6992b6f32c078a38ddb620dab"
+  },
+  "scope": "flat-ground 0.1m/s forward trot, one initial state per case; ideal state feedback",
+  "cpp": "centroidal input matrix, trot scheduler, quintic/quartic swing trajectory",
+  "timing": "wall-paced WSL simulation, asynchronous MPC worker + servo thread; compute percentiles and late cycles reported separately; no hard-real-time guarantee"
+}

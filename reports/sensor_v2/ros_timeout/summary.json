@@ -1,0 +1,50 @@
+{
+  "completed": true,
+  "failure": null,
+  "sim_seconds": 10.000000000000009,
+  "wall_seconds": 10.049427184000002,
+  "control_hz": 250.0,
+  "physics_hz": 500.0,
+  "cycle_count": 2500,
+  "late_cycles": 12,
+  "speed_command_mps": 0.1,
+  "load_fraction": 0.2,
+  "actual_payload_kg": 3.041281600000001,
+  "estimated_payload_kg": 3.0200464515315053,
+  "distance_m": 0.3778925781378483,
+  "walking_samples": 654,
+  "walking_speed_rmse_mps": 0.020564513446179836,
+  "walking_height_estimate_rmse_mm": 1.106787960257427,
+  "walking_position_estimate_rmse_m": 0.01848846010256046,
+  "walking_velocity_estimate_rmse_mps": 0.012491457817215803,
+  "walking_attitude_estimate_rmse_deg": 0.5626930408173649,
+  "peak_tilt_deg": 0.6917501916717449,
+  "peak_torque_utilization": 0.478266114780305,
+  "estimate_p99_ms": 0.4702900499978565,
+  "cycle_p99_ms": 3.304908750002722,
+  "mpc_accepted_updates": 356,
+  "mpc_rejected_updates": 0,
+  "final_mode": "STOPPED",
+  "stop_reason": "command timeout",
+  "first_stopped_s": 7.251999999999423,
+  "final_speed_mps": 0.0022804089593493927,
+  "rejected_commands": 0,
+  "max_telemetry_datagram_bytes": 870,
+  "seed": 2026,
+  "sensor_noise": {
+    "gyro_std_rad_s": 0.0005,
+    "accel_std_m_s2": 0.015,
+    "joint_position_std_rad": 5e-05,
+    "joint_velocity_std_rad_s": 0.0005,
+    "gyro_bias_rad_s": [
+      0.0005,
+      -0.0004,
+      0.0003
+    ],
+    "accel_bias_m_s2": [
+      0.02,
+      -0.015,
+      0.03
+    ]
+  }
+}

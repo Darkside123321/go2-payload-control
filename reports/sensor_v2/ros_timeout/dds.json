@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "stop_test": "timeout",
+  "counts": {
+    "imu": 227,
+    "joints": 227,
+    "odom": 227,
+    "status": 227
+  },
+  "first_stop_requested_sim_s": 7.119999999999438,
+  "first_stopped_sim_s": 7.27999999999942,
+  "last_positive_command_to_stopped_wall_s": 0.7811208689999987,
+  "first_stop_request_to_stopped_sim_s": 0.15999999999998238,
+  "odometry_forward_span_m": 0.35762538042978814,
+  "status": {
+    "time_s": 9.039999999999688,
+    "contacts": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "trusted_support": 4,
+    "mode": "STOPPED",
+    "payload_kg": 3.0200464515315053,
+    "requested_forward_mps": 0.0,
+    "stop_reason": "command timeout",
+    "rejected_commands": 0,
+    "rejected_twists": 98
+  }
+}

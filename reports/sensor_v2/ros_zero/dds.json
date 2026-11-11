@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "stop_test": "zero",
+  "counts": {
+    "imu": 227,
+    "joints": 227,
+    "odom": 227,
+    "status": 227
+  },
+  "first_stop_requested_sim_s": 6.639999999999491,
+  "first_stopped_sim_s": 6.7599999999994775,
+  "last_positive_command_to_stopped_wall_s": 0.2554043270000008,
+  "first_stop_request_to_stopped_sim_s": 0.11999999999998678,
+  "odometry_forward_span_m": 0.30760794721196577,
+  "status": {
+    "time_s": 9.039999999999688,
+    "contacts": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "trusted_support": 4,
+    "mode": "STOPPED",
+    "payload_kg": 3.02004699739147,
+    "requested_forward_mps": 0.0,
+    "stop_reason": "zero velocity command",
+    "rejected_commands": 0,
+    "rejected_twists": 97
+  }
+}

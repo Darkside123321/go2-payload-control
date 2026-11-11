@@ -1,0 +1,14 @@
+{
+  "measured_controller_sha256": "f495e8f4303fff802ca7fe1faa76daedba702bafe926d3976c9205dd1b457c32",
+  "final_controller_sha256": "13a80b603f0b634c4022ee2a8d6bd5afeb4c462c693a467b4554357b41a05088",
+  "normal_branch_unchanged": true,
+  "post_measurement_changes": [
+    "Added worker-exception-to-rejection branch; deterministic supervisor regression passed",
+    "Replaced former Windows teaching symlink with identical standalone learner_core.py content; checker uses project-relative path",
+    "Added demo, documentation and figure export"
+  ],
+  "measurement_source_snapshot": "walking_async_final/measured_controller.py.txt",
+  "final_source_manifest": "reports/FINAL_RESULTS.json source_sha256 and local Git commit",
+  "additional_case": "mid-swing failure uses final controller exception guard and only adds fault-start CLI parameter",
+  "first_seven_manifest": "walking_async_final/initial_7case_manifest.json"
+}

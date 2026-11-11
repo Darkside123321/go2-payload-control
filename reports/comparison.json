@@ -1,0 +1,131 @@
+{
+  "scope": "Standing equivalent-payload gravity compensation; no walking MPC, hardware, state estimator or hard-real-time validation",
+  "paired_config_checks": {
+    "duration_s": 10,
+    "initial_state": "same initial_state(nominal) and nominal assets",
+    "gains": "same fixed controller gains and objective weights",
+    "normal_score_window_s": [
+      1,
+      10
+    ],
+    "baseline_reused": true,
+    "one_run_per_load_per_variant": true,
+    "additional_stress_runs": 1
+  },
+  "comparisons": [
+    {
+      "scenario": "nominal",
+      "payload_kg": 0.0,
+      "baseline_height_rmse_mm": 0.10179861669158889,
+      "compensated_height_rmse_mm": 0.10177927813749668,
+      "rmse_reduction_pct": 0.018996873160670447,
+      "final_estimated_payload_kg": 1.978840081812121e-11,
+      "convergence_tolerance_kg": 0.05,
+      "time_to_enter_and_remain_in_tolerance_s": 0.004,
+      "last_2s_height_rmse_mm": 0.10180185432693314,
+      "controller_p99_ms": 0.3298881099999999,
+      "controller_max_ms": 0.5639,
+      "over_4ms_fraction": 0.0,
+      "acceptance_passed": true
+    },
+    {
+      "scenario": "payload10",
+      "payload_kg": 1.5206408000000005,
+      "baseline_height_rmse_mm": 14.877124161123975,
+      "compensated_height_rmse_mm": 2.7349929160395727,
+      "rmse_reduction_pct": 81.61611823347891,
+      "final_estimated_payload_kg": 1.5206407241049074,
+      "convergence_tolerance_kg": 0.07603204000000002,
+      "time_to_enter_and_remain_in_tolerance_s": 2.611999999999934,
+      "last_2s_height_rmse_mm": 0.15791976891991014,
+      "controller_p99_ms": 0.3120460099999999,
+      "controller_max_ms": 0.408635,
+      "over_4ms_fraction": 0.0,
+      "acceptance_passed": true
+    },
+    {
+      "scenario": "payload20",
+      "payload_kg": 3.041281600000001,
+      "baseline_height_rmse_mm": 29.14800614602317,
+      "compensated_height_rmse_mm": 8.306906214261181,
+      "rmse_reduction_pct": 71.50094530429986,
+      "final_estimated_payload_kg": 3.0412803391995946,
+      "convergence_tolerance_kg": 0.15206408000000005,
+      "time_to_enter_and_remain_in_tolerance_s": 3.7159999999998123,
+      "last_2s_height_rmse_mm": 0.25956997848809926,
+      "controller_p99_ms": 0.33961709999999995,
+      "controller_max_ms": 4.402615,
+      "over_4ms_fraction": 0.0004,
+      "acceptance_passed": true
+    }
+  ],
+  "stress": {
+    "scenario": "payload20",
+    "added_payload_kg": 3.041281600000001,
+    "nominal_controller_mass_kg": 15.206408000000003,
+    "completed": true,
+    "sim_seconds": 10.000000000000009,
+    "wall_seconds": 1.0346324120000077,
+    "height_rmse_m": 0.008315800586778098,
+    "steady_height_bias_m": -0.004466016328502884,
+    "peak_tilt_deg": 0.4605244395067165,
+    "max_torque_utilization": 0.18133290641701955,
+    "saturation_fraction_joint_ticks": 0.0,
+    "four_foot_contact_fraction": 1.0,
+    "solve_p50_ms": 0.2303625,
+    "solve_p95_ms": 0.2886215,
+    "solve_p99_ms": 0.34769373999999964,
+    "solve_max_ms": 0.553902,
+    "over_4ms_fraction": 0.0,
+    "max_equality_residual": 5.684341886080802e-14,
+    "max_inequality_violation": 0.0,
+    "qp_failures": 0,
+    "active_inequality_solves": 0,
+    "failure_reason": null,
+    "final_estimated_payload_kg": 3.0428003469756004,
+    "final_estimation_error_kg": 0.0015187469755995053,
+    "estimator_update_fraction": 0.6688,
+    "acceptance_passed": true
+  },
+  "stress_metrics": {
+    "max_xy_error_after_push_m": 0.01658622543566266,
+    "max_tilt_after_push_deg": 0.05774380176248526,
+    "updated_during_push_ticks": 1,
+    "updates_using_measured_accelerating_state_during_push": 0,
+    "timing_note": "One update logged in push window uses pre-push measurements at interval start; zero updates after first post-push state."
+  },
+  "estimator": {
+    "time_constant_s": 0.5,
+    "still_window_s": 0.3,
+    "linear_velocity_gate_mps": 0.02,
+    "angular_velocity_gate_radps": 0.05,
+    "joint_velocity_gate_radps": 0.1,
+    "linear_acceleration_gate_mps2": 0.2,
+    "angular_acceleration_gate_radps2": 1.0,
+    "joint_acceleration_gate_radps2": 2.0,
+    "max_jacobian_condition": 10000.0,
+    "clipping_fraction_of_nominal_mass": [
+      0,
+      0.3
+    ],
+    "force_reconstruction": "J_joint^T f = h_joint - measured_tau, quasi-static",
+    "non_identifiability": "A constant external vertical force is indistinguishable from added payload; reports use equivalent payload terminology.",
+    "assumptions": "four-foot near-static support, known attachment point at base-link inertial COM; ideal qpos/qvel; stress adds declared torque noise only",
+    "version": "v2, speed and acceleration gates"
+  },
+  "source_sha256": {
+    "run_compensated_v2.py": "0d42749fb61a4fc7b5892509952e1e5b619923f046a3aec136fccee7c83c51be",
+    "run_compensated.py": "06b150822ab27a013b29c72dbffef8d06aa08ec8afc97abf5b3b4d8294ecf686",
+    "check_learner.py": "7ba2bfe56880e1148d9e27bb32b08573cf938f0829aa8bdeef97e28e218caa4e",
+    "standing_control.py": "0cd6fe3f84a59f9c49ae7e16c58a2d92cae2a68bcd782f0c877232d6c6699341",
+    "learner_core.py": "d4f6ce68e20cbb2fcf0e223a686298ddc0e612851cd767856ac7b75c75bd4fdf",
+    "run_standing.py": "d96800728fd8c4aff519d44c875cce8868e52dd9c6466d6eaac833be98d6e232",
+    "check_constraints.py": "e1b9df978f8a132ba3e12c9353e71663f1a84d417f187b6d2f28841a7b748044",
+    "run_stress_v2.py": "32e5c0fd509ad950f05c91562083d009f3658f81acfeb1d9d0f44ef712fccec8",
+    "compensated_control.py": "18b66f9e315088022ee0984231c9cfe8791283a0b8c0df5f08a1c6a1f4938895",
+    "static_payload_observer.py": "d32c51aa767c7d6544311c21891e6ab0bf81b3343f6b2b63c17b93d3a8635ba1",
+    "dynamics_audit.py": "b27563b07cb0acb584b318c8a7fcd1d01c1580857f672f70352a915f1c1ee28b",
+    "run_stress.py": "fa1dfc2458ce0fbe939d770734b6418c553dc51abf177d919d7708f95447ebc5"
+  },
+  "upstream_commit": "1425b15f73bd4095f0df53709d7c389c3eb9e790"
+}

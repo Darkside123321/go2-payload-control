@@ -1,0 +1,96 @@
+{
+  "scope": "Static ideal point-contact equilibrium and 0.1 s open-loop interface smoke check; not a standing controller or MPC result",
+  "upstream_commit": "1425b15f73bd4095f0df53709d7c389c3eb9e790",
+  "asset_sha256": "077fc7f70ce2ddcfdab814aa0800efa2c974db6c98594b2f7663f779509fb912",
+  "mujoco": "3.5.0",
+  "nq": 19,
+  "nv": 18,
+  "actuated_joints": 12,
+  "mass_kg": 15.206408000000003,
+  "gravity_weight_N": 149.17486248000003,
+  "mass_matrix_min_eigenvalue": 0.004113999072947341,
+  "foot_order": [
+    "FL",
+    "FR",
+    "RL",
+    "RR"
+  ],
+  "contact_model": "ideal point forces at original foot site centers",
+  "foot_forces_world_N": [
+    [
+      -3.664907842759963e-15,
+      3.702016823368085e-34,
+      36.875439486124776
+    ],
+    [
+      -3.6604699660959535e-15,
+      1.2340056077893617e-34,
+      36.875439486124755
+    ],
+    [
+      -3.66379837359396e-15,
+      -2.468011215578724e-34,
+      37.71199175387526
+    ],
+    [
+      -3.66379837359396e-15,
+      -2.468011215578724e-34,
+      37.71199175387526
+    ]
+  ],
+  "vertical_force_sum_N": 149.17486248000003,
+  "equilibrium_residual_norm": 8.300029700997224e-14,
+  "nominal_joint_torques_Nm": [
+    -2.456820342712794,
+    0.4392444670714863,
+    5.881070839296879,
+    2.456820342712792,
+    0.4392444670714863,
+    5.881070839296876,
+    -2.5367110842829654,
+    0.4392444670714873,
+    6.020648440558955,
+    2.5367110842829654,
+    0.4392444670714873,
+    6.020648440558955
+  ],
+  "actuator_order": [
+    "FL_hip_joint",
+    "FL_thigh_joint",
+    "FL_calf_joint",
+    "FR_hip_joint",
+    "FR_thigh_joint",
+    "FR_calf_joint",
+    "RL_hip_joint",
+    "RL_thigh_joint",
+    "RL_calf_joint",
+    "RR_hip_joint",
+    "RR_thigh_joint",
+    "RR_calf_joint"
+  ],
+  "configured_effort_limits_Nm": [
+    23.5,
+    23.5,
+    45.0,
+    23.5,
+    23.5,
+    45.0,
+    23.5,
+    23.5,
+    45.0,
+    23.5,
+    23.5,
+    45.0
+  ],
+  "effort_limit_provenance": "upstream go2_constants.py configuration; not verified hardware ratings",
+  "max_torque_limit_utilization": 0.13379218756797678,
+  "min_friction_margin_N": 22.12526369167485,
+  "jacobian_fd_max_abs_error": 2.3502397250574347e-10,
+  "unit_motor_mapping_error": 0.0,
+  "physics_seconds": 0.10000000000000007,
+  "base_height_start_m": 0.286805846483303,
+  "base_height_end_m": 0.28687479701464946,
+  "last_contact_count": 4,
+  "finite_state": true,
+  "passed": true
+}

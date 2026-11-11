@@ -1,0 +1,19 @@
+{
+  "name": "nominal",
+  "report_root": "walking_async_final",
+  "load": 0.0,
+  "baseline": false,
+  "seconds": 12.0,
+  "velocity": 0.1,
+  "fault": false,
+  "stress": false,
+  "control_dt": 0.004,
+  "physics_dt": 0.002,
+  "initial_stand_s": 4.0,
+  "state": "ideal qpos/qvel; measured actual actuator torques",
+  "friction": 0.6,
+  "horizon": 10,
+  "mpc_dt": 0.02,
+  "payload_location": "base link inertial COM, point mass",
+  "cpp_source_sha256": "3b29abc7741ac223a54b240fb09bfcf340989de6992b6f32c078a38ddb620dab"
+}

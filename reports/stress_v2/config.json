@@ -1,0 +1,30 @@
+{
+  "duration_s": 10.0,
+  "control_dt_s": 0.004,
+  "physics_dt_s": 0.002,
+  "warmup_s": 1.0,
+  "load_fractions": [
+    0.2
+  ],
+  "load_location": "point payload at nominal base-link inertial COM; no added rotational inertia about that point",
+  "state_input": "ideal qpos/qvel; no state estimator",
+  "stance": "four scheduled point-contact feet at site centers",
+  "controller_mass": "fixed nominal inertia, gravity compensated using estimated payload",
+  "acceleration_gate": "linear norm<0.2m/s2; angular norm<1rad/s2; max joint<2rad/s2; backward velocity difference",
+  "estimator_inputs": "ideal qpos/qvel and joint torque measurement with Gaussian noise; no plant mass/contact-force access",
+  "torque_noise_sigma_Nm": 0.03,
+  "noise_seed": 2026,
+  "push_world_N": [
+    20.0,
+    0.0,
+    0.0
+  ],
+  "push_start_s": 4.0,
+  "push_end_s": 4.15,
+  "fail_height_m": 0.14,
+  "fail_tilt_deg": 30.0,
+  "accept_height_rmse_m": 0.02,
+  "accept_peak_tilt_deg": 5.0,
+  "effort_limits": "upstream configuration, not hardware-validated ratings",
+  "upstream_asset_sha256": "077fc7f70ce2ddcfdab814aa0800efa2c974db6c98594b2f7663f779509fb912"
+}
